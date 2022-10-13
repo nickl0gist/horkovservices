@@ -1,0 +1,25 @@
+server:
+  port: 8080
+spring:
+  application:
+    # The name used by EUREKA
+    name: customer
+  datasource:
+    password: 'password'
+    # connection through url while this microservice is not docker container
+    url: jdbc:postgresql://localhost:5432/customer
+    username: 'horkovcode'
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
