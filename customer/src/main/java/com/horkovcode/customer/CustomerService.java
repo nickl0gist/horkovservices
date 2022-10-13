@@ -2,22 +2,26 @@ package com.horkovcode.customer;
 
 import com.horkovcode.clients.fraud.FraudCheckResponse;
 import com.horkovcode.clients.fraud.FraudClient;
+import com.horkovcode.clients.notification.NotificationClient;
+import com.horkovcode.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Created on 12.10.2022
+ *
  * @author Mykola Horkov
  * <br> mykola.horkov@gmail.com
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
+    private final NotificationClient notificationClient;
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
@@ -41,8 +45,16 @@ public class CustomerService {
         // With usage of Feign
         FraudCheckResponse response = fraudClient.isFraudster(customer.getId());
 
-        if (response.getFraudster()){
+        if (response.getFraudster()) {
             throw new IllegalStateException("fraudster wtf");
         }
+
+        NotificationRequest notificationRequest = NotificationRequest.builder()
+                .toCustomerEmail(customer.getEmail())
+                .toCustomerId(customer.getId())
+                .message(String.format("Customer with email: %s has been created with id: %d", customer.getEmail(), customer.getId()))
+                .build();
+
+        notificationClient.sendNotification(notificationRequest);
     }
 }
