@@ -1,5 +1,7 @@
 package com.horkovcode.customer;
 
+import com.horkovcode.clients.fraud.FraudCheckResponse;
+import com.horkovcode.clients.fraud.FraudClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +17,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final RestTemplate restTemplate;
+    private final FraudClient fraudClient;
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
@@ -24,7 +27,8 @@ public class CustomerService {
                 .build();
         customerRepository.saveAndFlush(customer);
 
-        FraudCheckResponse response = restTemplate.getForObject(
+        // Before Feign was used
+        /*FraudCheckResponse response = restTemplate.getForObject(
                 //without EUREKA
                 //"http://localhost:8081/api/v1/fraud-check/{customerId}",
 
@@ -32,7 +36,10 @@ public class CustomerService {
                 "http://FRAUD/api/v1/fraud-check/{customerId}",
                 FraudCheckResponse.class,
                 customer.getId()
-        );
+        );*/
+
+        // With usage of Feign
+        FraudCheckResponse response = fraudClient.isFraudster(customer.getId());
 
         if (response.getFraudster()){
             throw new IllegalStateException("fraudster wtf");
