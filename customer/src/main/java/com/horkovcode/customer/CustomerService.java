@@ -1,8 +1,8 @@
 package com.horkovcode.customer;
 
+import com.horkovcode.amqp.RabbitMQMessageProducer;
 import com.horkovcode.clients.fraud.FraudCheckResponse;
 import com.horkovcode.clients.fraud.FraudClient;
-import com.horkovcode.clients.notification.NotificationClient;
 import com.horkovcode.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,8 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final FraudClient fraudClient;
-    private final NotificationClient notificationClient;
+    //private final NotificationClient notificationClient;
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
@@ -32,7 +33,7 @@ public class CustomerService {
         customerRepository.saveAndFlush(customer);
 
         // Before Feign was used
-        /*FraudCheckResponse response = restTemplate.getForObject(
+        /**FraudCheckResponse response = restTemplate.getForObject(
                 //without EUREKA
                 //"http://localhost:8081/api/v1/fraud-check/{customerId}",
 
@@ -49,12 +50,22 @@ public class CustomerService {
             throw new IllegalStateException("fraudster wtf");
         }
 
+
+
         NotificationRequest notificationRequest = NotificationRequest.builder()
                 .toCustomerEmail(customer.getEmail())
                 .toCustomerId(customer.getId())
                 .message(String.format("Customer with email: %s has been created with id: %d", customer.getEmail(), customer.getId()))
                 .build();
-
+        /**
+         * This approach used before RabbitMQ implementation
         notificationClient.sendNotification(notificationRequest);
+         */
+
+        // With RabbitMQ achieved async message notification
+        rabbitMQMessageProducer.publish(
+                notificationRequest,
+                "internal.exchnge",
+                "internal.notification.routing-key");
     }
 }

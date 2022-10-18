@@ -36,7 +36,15 @@ services:
     container_name: zipkin
     ports:
     - "9411:9411"
-
+  # Zipkin Container configuration
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      # The port used by microservices in order to publish messages
+      - "5672:5672"
+      # Management port to use management console
+      - "15672:15672"
 #network communication
 networks:
   postgres:

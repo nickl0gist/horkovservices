@@ -10,7 +10,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author Mykola Horkov
  * <br> mykola.horkov@gmail.com
  */
-@SpringBootApplication
+@SpringBootApplication(
+        scanBasePackages = {
+                "com.horkovcode.customer",
+                "com.horkovcode.amqp"
+        }
+)
 @EnableEurekaClient
 @EnableFeignClients(
         basePackages = "com.horkovcode.clients"

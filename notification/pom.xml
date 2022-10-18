@@ -49,6 +49,17 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-sleuth-zipkin</artifactId>
         </dependency>
+        <!--START: The dependencies to use RabbitMQ-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.horkov</groupId>
+            <artifactId>amqp</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <!--The dependencies to use RabbitMQ: END-->
     </dependencies>
 
 </project>

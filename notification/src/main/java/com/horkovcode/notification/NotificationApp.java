@@ -10,13 +10,39 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author Mykola Horkov
  * <br> mykola.horkov@gmail.com
  */
-@SpringBootApplication
+@SpringBootApplication(
+        scanBasePackages = {
+                "com.horkovcode.notification",
+                "com.horkovcode.amqp"
+        }
+)
 @EnableEurekaClient
 @EnableFeignClients(
         basePackages = "com.horkovcode.clients"
+
 )
 public class NotificationApp {
     public static void main(String[] args) {
         SpringApplication.run(NotificationApp.class, args);
     }
+
+    /**
+     * Uncomment this in order to test Messaging right after starting Notification App.
+    @Bean
+    CommandLineRunner commandLineRunner(RabbitMQMessageProducer producer, NotificationConfig notificationConfig){
+            return args -> {
+                producer.publish(
+                        new Person("Jumanji", 27),
+                        notificationConfig.getInternalExchange(),
+                        notificationConfig.getInternalNotificationRoutingKey()
+                );
+            };
+    }
+
+    @Data
+    @AllArgsConstructor
+    class Person{
+        private String name;
+        private int age;
+    } */
 }
