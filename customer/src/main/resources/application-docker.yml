@@ -1,12 +1,13 @@
 server:
-  port: 8082
+  port: 8080
 spring:
   application:
-    name: notification
+    # The name used by EUREKA
+    name: customer
   datasource:
     password: 'password'
     # connection through url while this microservice is not docker container
-    url: jdbc:postgresql://postgres:5432/notification
+    url: jdbc:postgresql://postgres:5432/customer
     username: 'horkovcode'
   jpa:
     properties:
@@ -17,23 +18,12 @@ spring:
       ddl-auto: create-drop
     show-sql: true
   zipkin:
-    base-url: http://localhost:9411
+    base-url: http://zipkin:9411
   rabbitmq:
-    addresses: localhost:5672
+    addresses: rabbitmq:5672
 eureka:
   client:
     service-url:
       defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true
-# Properties for how to connect to Queue including the exchange and routing key.
-rabbitmq:
-  # Topic exchange
-  exchanges:
-    internal: internal.exchnge
-  # Queue setting
-  queue:
-    notification: notification.queue
-  # Binding of the Topic Exchange to Queue
-  routing-keys:
-    internal-notification: internal.notification.routing-key
