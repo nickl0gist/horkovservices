@@ -49,30 +49,30 @@ services:
     networks:
       - spring
   # Configuration of eureka server
-  eureka-server:
-    image: nickl0gist/eureka-server:latest
-    container_name: eureka-server
-    ports:
-      - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - spring
-    depends_on:
-      - zipkin
+#  eureka-server:
+#    image: nickl0gist/eureka-server:latest
+#    container_name: eureka-server
+#    ports:
+#      - "8761:8761"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#    depends_on:
+#      - zipkin
   # Configuration of apigw
-  apigw:
-    image: nickl0gist/apigw:latest
-    container_name: apigw
-    ports:
-      - "8083:8083"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - spring
-    depends_on:
-      - zipkin
-      - eureka-server
+#  apigw:
+#    image: nickl0gist/apigw:latest
+#    container_name: apigw
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#    depends_on:
+#      - zipkin
+#      - eureka-server
   # Configuration of customer
   customer:
     image: nickl0gist/customer:latest
@@ -86,7 +86,7 @@ services:
       - postgres
     depends_on:
       - zipkin
-      - eureka-server
+      #- eureka-server
       - postgres
       - rabbitmq
   # Configuration of fraud
@@ -102,7 +102,7 @@ services:
       - postgres
     depends_on:
       - zipkin
-      - eureka-server
+      #- eureka-server
       - postgres
       - rabbitmq
   # Configuration of notification
@@ -118,7 +118,7 @@ services:
       - postgres
     depends_on:
       - zipkin
-      - eureka-server
+      #- eureka-server
       - postgres
       - rabbitmq
 # network communication

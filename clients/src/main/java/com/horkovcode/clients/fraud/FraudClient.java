@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @author Mykola Horkov
  * <br> mykola.horkov@gmail.com
  */
-@FeignClient("fraud")
+@FeignClient(name = "fraud", url = "${clients.fraud.url}")
 public interface FraudClient {
 
     @GetMapping(path = "api/v1/fraud-check/{customerId}")

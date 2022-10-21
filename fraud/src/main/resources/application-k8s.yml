@@ -18,11 +18,3 @@ spring:
     show-sql: true
   zipkin:
     base-url: http://zipkin:9411
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka
-    fetch-registry: true
-    register-with-eureka: true
-    # As k8s provides service discovery, no needs to use Eureka
-    enabled: false

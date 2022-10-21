@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author Mykola Horkov
  * <br> mykola.horkov@gmail.com
  */
-@FeignClient("notification")
+@FeignClient(name = "notification", url = "${clients.notification.url}")
 public interface NotificationClient {
 
     @PostMapping("api/v1/notification")

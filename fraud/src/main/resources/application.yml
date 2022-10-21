@@ -24,3 +24,5 @@ eureka:
       defaultZone: http://localhost:8761/eureka
     fetch-registry: true
     register-with-eureka: true
+    # As k8s provides service discovery, no needs to use Eureka
+    enabled: false

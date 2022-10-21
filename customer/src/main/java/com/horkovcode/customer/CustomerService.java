@@ -65,7 +65,7 @@ public class CustomerService {
         // With RabbitMQ achieved async message notification
         rabbitMQMessageProducer.publish(
                 notificationRequest,
-                "internal.exchnge",
+                "internal.exchange",
                 "internal.notification.routing-key");
     }
 }

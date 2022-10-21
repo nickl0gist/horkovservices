@@ -1,13 +1,12 @@
 server:
-  port: 8080
+  port: 8082
 spring:
   application:
-    # The name used by EUREKA
-    name: customer
+    name: notification
   datasource:
     password: 'password'
     # connection through url while this microservice is not docker container
-    url: jdbc:postgresql://postgres:5432/customer
+    url: jdbc:postgresql://postgres:5432/notification
     username: 'horkovcode'
   jpa:
     properties:
@@ -21,11 +20,14 @@ spring:
     base-url: http://zipkin:9411
   rabbitmq:
     addresses: rabbitmq:5672
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka
-    fetch-registry: true
-    register-with-eureka: true
-    # As k8s provides service discovery, no needs to use Eureka
-    enabled: false
+# Properties for how to connect to Queue including the exchange and routing key.
+rabbitmq:
+  # Topic exchange
+  exchanges:
+    internal: internal.exchange
+  # Queue setting
+  queue:
+    notification: notification.queue
+  # Binding of the Topic Exchange to Queue
+  routing-keys:
+    internal-notification: internal.notification.routing-key

@@ -5,10 +5,9 @@ spring:
     # The name used by EUREKA
     name: customer
   datasource:
-    password: 'password'
-    # connection through url while this microservice is not docker container
+    password: password
     url: jdbc:postgresql://postgres:5432/customer
-    username: 'horkovcode'
+    username: horkovcode
   jpa:
     properties:
       hibernate:
@@ -21,11 +20,3 @@ spring:
     base-url: http://zipkin:9411
   rabbitmq:
     addresses: rabbitmq:5672
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka
-    fetch-registry: true
-    register-with-eureka: true
-    # As k8s provides service discovery, no needs to use Eureka
-    enabled: false
