@@ -1,0 +1,11 @@
+# Settings of the Postgres User
+# Never deploy Postgres on k8s in real production. Current solution os for testing only.
+# For real production use manage solution such as ARDS (Amazon Relational Database Service), or same of GCP or Azure
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  POSTGRES_DB: horkovcode
+  POSTGRES_USER: horkovcode
+  POSTGRES_PASSWORD: password

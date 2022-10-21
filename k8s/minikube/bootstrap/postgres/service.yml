@@ -1,0 +1,14 @@
+# Settings of the service of how other PODS communicate with Postgres
+# Never deploy Postgres on k8s in real production. Current solution os for testing only.
+# For real production use manage solution such as ARDS (Amazon Relational Database Service), or same of GCP or Azure
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: ClusterIP

@@ -1,5 +1,5 @@
 services:
-# The Database container
+  # The Database container
   postgres:
     container_name: postgres
     image: postgres:14
@@ -14,8 +14,7 @@ services:
     networks:
       - postgres
     restart: unless-stopped
-
-  # grafical UI client for Postgres
+  # graphical UI client for Postgres
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4

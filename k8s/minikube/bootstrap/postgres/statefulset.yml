@@ -1,0 +1,46 @@
+# Setting to instantiate the instance
+# Never deploy Postgres on k8s in real production. Current solution os for testing only.
+# For real production use manage solution such as ARDS (Amazon Relational Database Service), or same of GCP or Azure
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  # The name defined in the service.yml metadata.name
+  serviceName: postgres
+  replicas: 1
+  template:
+    metadata:
+      name: postgres
+      labels:
+        app: postgres
+    spec:
+      volumes:
+        - name: postgres
+          persistentVolumeClaim:
+            # The name defined in the volume.yml metadata.name [second section]
+            claimName: postgres-pc-volume-claim
+      containers:
+        - name: postgres
+          image: postgres
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres
+          envFrom:
+            - configMapRef:
+                # The name defined in the configmap.yml metadata.name
+                name: postgres-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: postgres

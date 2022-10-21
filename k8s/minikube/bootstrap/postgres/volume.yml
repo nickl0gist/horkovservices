@@ -1,0 +1,33 @@
+# Define how Postgres will store it's data into our Minikube node
+# Never deploy Postgres on k8s in real production. Current solution os for testing only.
+# For real production use manage solution such as ARDS (Amazon Relational Database Service), or same of GCP or Azure
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pc-volume
+  labels:
+    type: local
+    app: postgres
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    # The Path within Minikube
+    path: /mnt/data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pc-volume-claim
+  labels:
+    app: postgres
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
